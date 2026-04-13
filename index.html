@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>RMAX PREDIK | BOT SPACEMAN</title>
+<meta name="description" content="RMAX PREDIK - Bot Prediksi Spaceman dengan akurasi tertinggi. Own by rmaxofficial.">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+:root {
+  --rmax-bg: #0a1128;
+  --rmax-card: #0f1a2f;
+  --rmax-blue-light: #3b82f6;
+  --rmax-blue-soft: #60a5fa;
+  --rmax-blue-glow: #1e3a8a;
+  --rmax-cyan: #38bdf8;
+  --rmax-accent: #0ea5e9;
+  --rmax-white: #f0f9ff;
+  --rmax-dim: #94a3b8;
+  --rmax-success: #10b981;
+  --rmax-warning: #f59e0b;
+  --rmax-border: rgba(59,130,246,0.25);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  font-family:'Rajdhani',sans-serif;
+  background: var(--rmax-bg);
+  color: var(--rmax-white);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+.starfield{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  pointer-events:none;z-index:0;overflow:hidden;
+}
+.star{
+  position:absolute;border-radius:50%;
+  animation:twinkle var(--dur,3s) ease-in-out infinite;
+  animation-delay:var(--delay,0s);
+}
+@keyframes twinkle{
+  0%,100%{opacity:0.2;transform:scale(1);}
+  50%{opacity:0.9;transform:scale(1.2);}
+}
+
+.bot-overlay{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  z-index:9999;display:none;
+  justify-content:center;align-items:flex-start;
+  overflow-y:auto;padding:16px 16px 32px;
+  background: radial-gradient(ellipse at 50% 0%, #0a1a3a 0%, #050c1a 80%);
+}
+.bot-overlay.active{display:flex;}
+
+#bot-start-page .card, #bot-result-page .card{
+  width:100%;max-width:420px;
+  margin:auto;
+  background: linear-gradient(145deg, rgba(59,130,246,0.12) 0%, rgba(15,26,47,0.9) 100%);
+  border: 1px solid var(--rmax-border);
+  border-radius:28px;
+  padding:24px 20px;
+  backdrop-filter:blur(16px);
+  position:relative;
+  overflow:hidden;
+  box-shadow: 0 20px 35px -10px rgba(0,0,0,0.4), 0 0 0 1px rgba(59,130,246,0.1) inset;
+}
+#bot-start-page .card::before, #bot-result-page .card::before{
+  content:'';position:absolute;top:-1px;left:5%;right:5%;height:3px;
+  background: linear-gradient(90deg, transparent, var(--rmax-blue-light), var(--rmax-cyan), var(--rmax-blue-light), transparent);
+  border-radius:3px;
+}
+
+.logo-row{
+  display:flex;align-items:center;gap:12px;margin-bottom:20px;
+  justify-content:center;
+}
+.logo-badge{
+  background: linear-gradient(135deg, var(--rmax-blue-light), var(--rmax-cyan));
+  border-radius:40px;
+  padding:6px 16px;
+  font-family:'Orbitron',monospace;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:1px;
+  color:#fff;
+  text-transform:uppercase;
+  box-shadow:0 0 12px rgba(59,130,246,0.5);
+}
+.version-tag{
+  font-size:11px;
+  background: rgba(59,130,246,0.2);
+  color: var(--rmax-cyan);
+  border:1px solid rgba(56,189,248,0.4);
+  padding:3px 10px;
+  border-radius:30px;
+  font-family:'Orbitron',sans-serif;
+  font-weight:600;
+}
+
+/* Spaceman Avatar - menggunakan Font Awesome sebagai fallback */
+.spaceman-wrap{
+  position:relative;text-align:center;margin:0 auto 20px;
+  width:130px;height:130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.spaceman-icon{
+  font-size: 100px;
+  color: var(--rmax-blue-light);
+  text-shadow: 0 0 20px var(--rmax-blue-light);
+  animation: floatAstro 3s ease-in-out infinite;
+}
+@keyframes floatAstro{
+  0%,100%{transform: translateY(0px);}
+  50%{transform: translateY(-8px);}
+}
+.spaceman-wrap::before{
+  content:'';position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:150px;height:150px;border-radius:50%;
+  background: radial-gradient(circle, rgba(59,130,246,0.3) 0%, transparent 70%);
+  animation:pulseGlow 2s ease-in-out infinite;
+}
+@keyframes pulseGlow{
+  0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.6;}
+  50%{transform:translate(-50%,-50%) scale(1.15);opacity:1;}
+}
+
+.hero-title{
+  font-family:'Orbitron',monospace;
+  font-size:clamp(18px,5vw,24px);
+  font-weight:900;
+  text-align:center;
+  background: linear-gradient(135deg, #fff, var(--rmax-blue-soft), var(--rmax-cyan));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  line-height:1.3;
+  margin-bottom:6px;
+  letter-spacing:1px;
+}
+.hero-sub{
+  text-align:center;font-size:13px;
+  color: var(--rmax-dim);
+  margin-bottom:20px;
+  letter-spacing:1px;
+  font-weight:500;
+}
+
+.stats-row{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:8px;margin-bottom:20px;
+}
+.stat-box{
+  background: rgba(15,26,47,0.7);
+  border:1px solid rgba(59,130,246,0.3);
+  border-radius:20px;
+  padding:12px 8px;
+  text-align:center;
+  backdrop-filter: blur(4px);
+  transition:0.2s;
+}
+.stat-box:hover{border-color:var(--rmax-blue-light);box-shadow:0 0 12px rgba(59,130,246,0.2);}
+.stat-val{
+  font-family:'Orbitron',monospace;font-size:16px;font-weight:800;
+  color: var(--rmax-blue-soft);
+  display:block;line-height:1;margin-bottom:4px;
+  text-shadow:0 0 5px rgba(59,130,246,0.4);
+}
+.stat-lbl{font-size:10px;color: rgba(255,255,255,0.5);letter-spacing:0.5px;}
+
+.btn-primary{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:16px;border-radius:40px;border:none;cursor:pointer;
+  font-family:'Orbitron',monospace;font-size:14px;font-weight:700;
+  letter-spacing:1px;text-decoration:none;
+  background: linear-gradient(95deg, var(--rmax-blue-light), var(--rmax-accent));
+  color:#fff;
+  position:relative;overflow:hidden;
+  box-shadow:0 5px 20px rgba(59,130,246,0.5);
+  transition:transform 0.2s,box-shadow 0.2s;
+  margin-bottom:10px;
+}
+.btn-primary::before{
+  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background: linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
+  animation:shimmer 2.2s infinite;
+}
+@keyframes shimmer{to{left:100%;}}
+.btn-primary:active{transform:scale(0.97);}
+
+.btn-outline{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:14px;border-radius:40px;cursor:pointer;
+  font-family:'Orbitron',monospace;font-size:12px;font-weight:600;
+  letter-spacing:1px;text-decoration:none;
+  background:rgba(59,130,246,0.08);
+  color: var(--rmax-cyan);
+  border:1.5px solid rgba(59,130,246,0.5);
+  transition:all 0.2s;margin-bottom:16px;
+}
+.btn-outline:active{background:rgba(59,130,246,0.2);transform:scale(0.97);}
+
+.perhatian{
+  background: rgba(245,158,11,0.08);
+  border:1px solid rgba(245,158,11,0.3);
+  border-radius:20px;
+  padding:14px;margin-bottom:16px;
+}
+.perhatian-hdr{
+  display:flex;align-items:center;gap:6px;
+  font-family:'Orbitron',monospace;font-size:11px;
+  color: var(--rmax-warning);
+  margin-bottom:10px;font-weight:700;
+  letter-spacing:1px;
+}
+.perhatian ol{padding-left:16px;color:rgba(255,255,255,0.6);font-size:12px;line-height:1.8;}
+.perhatian li strong{color:var(--rmax-blue-soft);}
+
+.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.feat{
+  background:rgba(15,26,47,0.6);
+  border:1px solid rgba(59,130,246,0.2);
+  border-radius:20px;
+  padding:12px 8px;text-align:center;
+  transition:0.2s;
+}
+.feat-icon{font-size:20px;margin-bottom:6px;display:block;color:var(--rmax-blue-soft);}
+.feat h4{font-size:10px;color:var(--rmax-cyan);margin-bottom:4px;letter-spacing:0.5px;font-weight:700;}
+.feat p{font-size:9px;color:rgba(255,255,255,0.45);line-height:1.4;}
+
+#bot-loading-page{
+  background: radial-gradient(ellipse at 50% 30%, #0a1a3a 0%, #040b17 80%);
+  flex-direction:column;align-items:center;justify-content:center;
+}
+.loading-inner{text-align:center;width:100%;max-width:320px;padding:20px;}
+.loading-astro{
+  font-size: 80px;
+  color: var(--rmax-blue-light);
+  margin-bottom: 20px;
+  display: inline-block;
+  animation: spinAstro 1.5s ease-in-out infinite, floatAstro 2s ease-in-out infinite;
+}
+@keyframes spinAstro{
+  0%,100%{transform: rotate(0deg);}
+  50%{transform: rotate(10deg);}
+}
+.scan-ring{
+  position:relative;width:120px;height:120px;margin:0 auto 24px;display:flex;
+  align-items:center;justify-content:center;
+}
+.scan-ring::before,.scan-ring::after{
+  content:'';position:absolute;border-radius:50%;
+  border:2px solid transparent;
+}
+.scan-ring::before{
+  width:100%;height:100%;
+  border-top-color:var(--rmax-blue-light);
+  border-right-color:var(--rmax-blue-light);
+  animation:spin 1.2s linear infinite;
+  box-shadow:0 0 20px var(--rmax-blue-light);
+}
+.scan-ring::after{
+  width:75%;height:75%;
+  border-bottom-color:var(--rmax-cyan);
+  border-left-color:var(--rmax-cyan);
+  animation:spin 0.8s linear infinite reverse;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-title{
+  font-family:'Orbitron',monospace;font-size:13px;
+  color: var(--rmax-cyan);letter-spacing:2px;margin-bottom:20px;
+  animation:textPulse 1.2s ease-in-out infinite;
+}
+@keyframes textPulse{50%{opacity:0.5;}}
+.progress-wrap{
+  background:rgba(59,130,246,0.1);
+  border-radius:30px;height:8px;
+  width:100%;overflow:hidden;margin-bottom:10px;
+  border:1px solid rgba(59,130,246,0.2);
+}
+#progress-bar{
+  height:100%;width:0%;border-radius:30px;
+  background: linear-gradient(90deg, var(--rmax-blue-light), var(--rmax-cyan));
+  box-shadow:0 0 12px var(--rmax-cyan);
+}
+#progress-text{
+  font-family:'Orbitron',monospace;font-size:14px;
+  color: var(--rmax-white);margin-bottom:8px;font-weight:700;
+}
+.loading-steps{font-size:12px;color:var(--rmax-dim);letter-spacing:1px;}
+
+.result-header{text-align:center;margin-bottom:20px;}
+.result-header h2{
+  font-family:'Orbitron',monospace;font-size:14px;
+  color: var(--rmax-cyan);letter-spacing:3px;margin-bottom:4px;
+  text-shadow:0 0 5px rgba(56,189,248,0.3);
+}
+.result-header p{font-size:12px;color:var(--rmax-dim);}
+.result-astro{
+  font-size: 60px;
+  color: var(--rmax-blue-soft);
+  text-align: center;
+  display: block;
+  margin: 0 auto 16px;
+  animation: floatAstro 2s ease-in-out infinite;
+}
+
+.mult-ring{
+  position:relative;width:180px;height:180px;
+  margin:0 auto 24px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+}
+.ring-outer,.ring-inner{
+  position:absolute;border-radius:50%;
+  border:2px solid transparent;
+}
+.ring-outer{
+  width:100%;height:100%;
+  border-top-color: var(--rmax-blue-light);
+  border-bottom-color: var(--rmax-blue-light);
+  border-left-color: transparent;
+  border-right-color: transparent;
+  animation:spin 3s linear infinite;
+  box-shadow:0 0 20px rgba(59,130,246,0.4);
+}
+.ring-inner{
+  width:78%;height:78%;
+  border-top-color:transparent;border-right-color: var(--rmax-cyan);
+  border-bottom-color:transparent;border-left-color: var(--rmax-cyan);
+  animation:spin 2s linear infinite reverse;
+  box-shadow:0 0 15px rgba(56,189,248,0.3);
+}
+.ring-glow{
+  position:absolute;width:60%;height:60%;border-radius:50%;
+  background: radial-gradient(circle, rgba(59,130,246,0.2) 0%, transparent 70%);
+}
+.mult-label{
+  font-family:'Orbitron',monospace;font-size:9px;
+  color: var(--rmax-cyan);letter-spacing:2px;
+  position:relative;z-index:2;margin-bottom:2px;
+}
+.mult-value{
+  font-family:'Orbitron',monospace;
+  font-size:clamp(28px,8vw,36px);font-weight:900;
+  color: #fff;text-shadow:0 0 20px var(--rmax-blue-light);
+  position:relative;z-index:2;line-height:1;
+}
+
+.reco-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.reco-card{
+  background:rgba(15,26,47,0.7);
+  border-radius:24px;padding:12px;
+  border:1px solid rgba(59,130,246,0.25);
+  text-align:center;
+  transition:0.2s;
+}
+.reco-icon{font-size:18px;display:block;margin-bottom:4px;color:var(--rmax-blue-soft);}
+.reco-lbl{font-size:10px;color:var(--rmax-dim);display:block;margin-bottom:4px;}
+.reco-val{font-family:'Orbitron',monospace;font-size:14px;font-weight:700;}
+.reco-bet .reco-val{color: var(--rmax-success);}
+.reco-time .reco-val{color: var(--rmax-warning);}
+
+.warning-box{
+  background:rgba(59,130,246,0.08);
+  border:1px solid rgba(59,130,246,0.3);
+  border-radius:20px;
+  padding:10px 12px;margin-bottom:16px;
+  font-size:11px;color:rgba(255,255,255,0.6);text-align:center;line-height:1.6;
+}
+.warning-box i{color:var(--rmax-blue-light);margin-right:4px;}
+
+.btn-primary.result-cta{
+  background: linear-gradient(95deg, var(--rmax-blue-light), #2563eb);
+  box-shadow:0 0 25px rgba(59,130,246,0.6);
+  font-size:13px;
+}
+.btn-outline.result-close{font-size:11px;margin-bottom:0;}
+
+.divider{
+  height:1px;background: linear-gradient(90deg,transparent, rgba(59,130,246,0.4),transparent);
+  margin:16px 0;
+}
+
+.trust-row{
+  display:flex;justify-content:center;gap:16px;margin-top:12px;
+  flex-wrap:wrap;
+}
+.trust-badge{
+  display:flex;align-items:center;gap:5px;
+  font-size:10px;color: var(--rmax-dim);
+}
+.trust-badge i{font-size:12px;color: var(--rmax-blue-soft);}
+
+.rmax-owner-footer{
+  text-align:center;
+  margin-top:20px;
+  padding-top:12px;
+  border-top:1px dashed rgba(59,130,246,0.3);
+  font-size:10px;
+  font-family:'Orbitron',monospace;
+  letter-spacing:1px;
+  color: var(--rmax-dim);
+}
+.rmax-owner-footer span{
+  color: var(--rmax-blue-soft);
+  font-weight:bold;
+  text-transform:uppercase;
+}
+</style>
+</head>
+<body>
+
+<div class="starfield" id="starfield"></div>
+
+<!-- START PAGE -->
+<div id="bot-start-page" class="bot-overlay active">
+  <div class="card">
+    <div class="logo-row">
+      <div class="logo-badge"><i class="fas fa-chart-line"></i> RMAX PREDIK</div>
+      <span class="version-tag">v3.1.1 | RMAX</span>
+    </div>
+
+    <div class="spaceman-wrap">
+      <i class="fas fa-user-astronaut spaceman-icon"></i>
+    </div>
+
+    <h1 class="hero-title">RMAX PREDIK<br>AUTO WIN 99.9%</h1>
+    <p class="hero-sub">BOT PREDIKSI SPACEMAN | MAX 5000X</p>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <span class="stat-val">99.9%</span>
+        <span class="stat-lbl">Win Rate</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-val">5000X</span>
+        <span class="stat-lbl">Max Mult</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-val">24/7</span>
+        <span class="stat-lbl">Live AI</span>
+      </div>
+    </div>
+
+    <button id="start-bot-now-button" class="btn-primary">
+      <i class="fas fa-rocket"></i> START PREDIKSI RMAX
+    </button>
+    <a href="https://biolinku.co/spc" target="_blank" class="btn-outline">
+      <i class="fas fa-user-plus"></i> DAFTAR AKUN SPACEMAN
+    </a>
+    <a href="https://whatsapp.com/channel/0029Vb7qLGO60eBcUbUJKM1C" target="_blank" class="btn-outline">
+      <i class="fab fa-whatsapp"></i> GABUNG SALURAN WHATSAPP
+    </a>
+
+    <div class="perhatian">
+      <div class="perhatian-hdr"><i class="fas fa-exclamation-triangle"></i> PERHATIAN RMAX</div>
+      <ol>
+        <li>Pastikan sudah <strong>mendaftar & mengisi saldo</strong> di situs rekomendasi RMAX sebelum menggunakan bot ini.</li>
+        <li>Pastikan koneksi internet stabil selama proses prediksi.</li>
+        <li>Jangan tutup browser selama analisis berlangsung.</li>
+      </ol>
+    </div>
+
+    <div class="feature-grid">
+      <div class="feat">
+        <span class="feat-icon">⚡</span>
+        <h4>RMAX Quantum</h4>
+        <p>Neural network dengan akurasi 99.97%</p>
+      </div>
+      <div class="feat">
+        <span class="feat-icon">🎯</span>
+        <h4>Akurasi Tinggi</h4>
+        <p>Verified by RMAX Official</p>
+      </div>
+      <div class="feat">
+        <span class="feat-icon">🔄</span>
+        <h4>Update Real-Time</h4>
+        <p>Analisis pola setiap 15 detik</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="trust-row">
+      <div class="trust-badge"><i class="fas fa-shield-alt"></i> Aman Terpercaya</div>
+      <div class="trust-badge"><i class="fas fa-lock"></i> Enkripsi RMAX</div>
+      <div class="trust-badge"><i class="fas fa-star"></i> Official Partner</div>
+    </div>
+    <div class="rmax-owner-footer">
+      <i class="fas fa-crown"></i> Own by <span>rmaxofficial</span> • Rmax Predik Blue Edition
+    </div>
+  </div>
+</div>
+
+<!-- LOADING PAGE -->
+<div id="bot-loading-page" class="bot-overlay">
+  <div class="loading-inner">
+    <i class="fas fa-user-astronaut loading-astro"></i>
+    <div class="scan-ring"></div>
+    <p class="loading-title">RMAX ANALYZING PATTERNS...</p>
+    <div class="progress-wrap">
+      <div id="progress-bar"></div>
+    </div>
+    <p id="progress-text">0%</p>
+    <p class="loading-steps" id="loading-step">Initializing RMAX Quantum engine...</p>
+  </div>
+</div>
+
+<!-- RESULT PAGE -->
+<div id="bot-result-page" class="bot-overlay">
+  <div class="card">
+    <div class="result-header">
+      <h2>RMAX PREDICTION RESULT</h2>
+      <p>Hasil analisis AI Rmax — Auto Win Rate 99.9%</p>
+    </div>
+
+    <i class="fas fa-user-astronaut result-astro"></i>
+
+    <div class="mult-ring">
+      <div class="ring-outer"></div>
+      <div class="ring-inner"></div>
+      <div class="ring-glow"></div>
+      <span class="mult-label">TABARAK DI</span>
+      <span class="mult-value" id="multiplier-result">0.00X</span>
+    </div>
+
+    <div class="reco-grid">
+      <div class="reco-card reco-bet">
+        <span class="reco-icon">💰</span>
+        <span class="reco-lbl">Rekomendasi Bet</span>
+        <span class="reco-val" id="bet-result">Rp0</span>
+      </div>
+      <div class="reco-card reco-time">
+        <span class="reco-icon">⏰</span>
+        <span class="reco-lbl">Pasang Pada</span>
+        <span class="reco-val" id="time-result">00:00</span>
+      </div>
+    </div>
+
+    <div class="warning-box">
+      <i class="fas fa-info-circle"></i>
+      Pastikan bermain di situs rekomendasi RMAX agar withdraw <strong>pasti dibayar</strong> dan game tidak lag.
+    </div>
+
+    <a href="https://biolinku.co/spc" target="_blank" class="btn-primary result-cta">
+      <i class="fas fa-gamepad"></i> MAIN SEKARANG DI RMAX
+    </a>
+    <button id="close-result-button" class="btn-outline result-close">
+      <i class="fas fa-redo"></i> PREDIKSI ULANG
+    </button>
+    <div class="rmax-owner-footer" style="margin-top:16px; border-top:none; padding-top:6px;">
+      <i class="fas fa-dice-d6"></i> powered by rmaxofficial • prediksi biru muda
+    </div>
+  </div>
+</div>
+
+<script>
+// STARFIELD
+(function(){
+  const sf = document.getElementById('starfield');
+  for(let i=0;i<80;i++){
+    const s=document.createElement('div');
+    s.className='star';
+    const sz=Math.random()*2+0.5;
+    const colors=['#b3d9ff','#3b82f6','#60a5fa','#c7e2ff'];
+    const c=colors[Math.floor(Math.random()*colors.length)];
+    Object.assign(s.style,{
+      width:sz+'px',height:sz+'px',
+      top:Math.random()*100+'%',left:Math.random()*100+'%',
+      background:c,
+      '--dur':(2+Math.random()*4)+'s',
+      '--delay':(-Math.random()*4)+'s'
+    });
+    sf.appendChild(s);
+  }
+})();
+
+// BOT LOGIC
+document.addEventListener('DOMContentLoaded',function(){
+  const startPage=document.getElementById('bot-start-page');
+  const loadingPage=document.getElementById('bot-loading-page');
+  const resultPage=document.getElementById('bot-result-page');
+  const startBtn=document.getElementById('start-bot-now-button');
+  const closeBtn=document.getElementById('close-result-button');
+
+  const steps = [
+    'Initializing RMAX quantum engine...',
+    'Scanning Spaceman server patterns...',
+    'Analyzing multiplier history (RMAX AI)...',
+    'Running neural network model RMAX...',
+    'Verifying prediction accuracy 99.9%...',
+    'Finalizing RMAX result...'
+  ];
+
+  function pad(n){ return n<10 ? '0'+n : n; }
+  function fmtRupiah(n){ return 'Rp'+new Intl.NumberFormat('id-ID').format(n); }
+
+  function showResults(){
+    const rand = Math.random();
+    let min, max, biasPower;
+    if (rand < 0.7) {
+        min = 1.19; max = 16.90; biasPower = 2.5;
+    } else if (rand < 0.9) {
+        min = 16.91; max = 24.90; biasPower = 1.8;
+    } else if (rand < 0.98) {
+        min = 24.91; max = 69.90; biasPower = 1.2;
+    } else {
+        min = 69.91; max = 333.90; biasPower = 1;
+    }
+    const r = Math.pow(Math.random(), biasPower);
+    const mult = (r * (max - min) + min).toFixed(2);
+    document.getElementById('multiplier-result').textContent = mult + 'X';
+    
+    const bets = [8000,10000,12000,14000,15000,20000,25000];
+    document.getElementById('bet-result').textContent = fmtRupiah(bets[Math.floor(Math.random() * bets.length)]);
+    
+    const randomMinutes = Math.floor(Math.random() * (15 - 9 + 1)) + 9;
+    const t = new Date();
+    t.setMinutes(t.getMinutes() + randomMinutes);
+    document.getElementById('time-result').textContent = pad(t.getHours()) + ':' + pad(t.getMinutes());
+  }
+
+  function runLoading(){
+    const bar=document.getElementById('progress-bar');
+    const txt=document.getElementById('progress-text');
+    const stepElem=document.getElementById('loading-step');
+    let w=0;
+    const iv=setInterval(function(){
+      if(w>=100){
+        clearInterval(iv);
+        loadingPage.style.display='none';
+        loadingPage.classList.remove('active');
+        showResults();
+        resultPage.style.display='flex';
+        resultPage.classList.add('active');
+      } else {
+        w++;
+        bar.style.width=w+'%';
+        txt.textContent=w+'%';
+        const si=Math.min(Math.floor(w/17), steps.length-1);
+        stepElem.textContent=steps[si];
+      }
+    }, 40);
+  }
+
+  if(startBtn){
+    startBtn.addEventListener('click', function(){
+      startPage.style.display='none';
+      startPage.classList.remove('active');
+      loadingPage.style.display='flex';
+      loadingPage.classList.add('active');
+      runLoading();
+    });
+  }
+
+  if(closeBtn){
+    closeBtn.addEventListener('click', function(){
+      resultPage.style.display='none';
+      resultPage.classList.remove('active');
+      document.getElementById('progress-bar').style.width='0%';
+      document.getElementById('progress-text').textContent='0%';
+      startPage.style.display='flex';
+      startPage.classList.add('active');
+    });
+  }
+});
+</script>
+</body>
+</html>
